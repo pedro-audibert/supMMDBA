@@ -1,0 +1,228 @@
+/* ========================================================================= */
+/* */
+/* ARQUIVO DE ESTILO PRINCIPAL (site.css)                                    */
+/* */
+/* Este arquivo centraliza todos os estilos globais e                        */
+/* componentes customizados para a aplicação MMDBA.                          */
+/* */
+/* ========================================================================= */
+
+
+/* ========================================================================= */
+/* # Seção 1: ESTRUTURA DO LAYOUT E ESTILOS GLOBAIS                          */
+/* ========================================================================= */
+/* Define o comportamento base para toda a página, incluindo a técnica       */
+/* "Sticky Footer" que utiliza Flexbox para manter o rodapé no lugar.        */
+/* ------------------------------------------------------------------------- */
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif; /* Fonte padrão do projeto */
+    background-color: #f0f2f5; /* Cor de fundo suave e neutra */
+    font-size: 14px;
+    display: flex;
+    flex-direction: column; /* Organiza o layout em uma coluna (header, main, footer) */
+}
+
+/* O conteúdo principal que cresce para ocupar o espaço vago entre o header e o footer. */
+.main-content {
+    flex: 1; /* Equivalente a flex-grow: 1 */
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+/* O rodapé, que nunca encolhe e permanece no final da página. */
+.footer {
+    flex-shrink: 0;
+    background-color: #ffffff;
+    border-top: 1px solid #dee2e6;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+
+/* ========================================================================= */
+/* # Seção 2: COMPONENTES REUTILIZÁVEIS                                      */
+/* ========================================================================= */
+/* Estilização de componentes customizados ou com variações do Bootstrap.    */
+/* ------------------------------------------------------------------------- */
+
+/* Estilo para os alertas de status de conexão e da máquina. */
+.alert-status {
+    border: 2px solid #6c757d;
+    border-radius: 0.5rem;
+}
+
+/* Componente completo do medidor (gauge) de velocidade. */
+.gauge {
+    width: 100%;
+    max-width: 200px;
+    aspect-ratio: 1 / 1;
+    margin: 0 auto;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.07));
+}
+
+.dial {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(145deg, #f0f0f0, #cacaca);
+    transition: box-shadow 0.5s ease;
+    position: relative;
+}
+
+.fill {
+    position: absolute;
+    width: 87%;
+    height: 87%;
+    border-radius: 50%;
+    transition: filter 0.5s ease;
+}
+
+.cover {
+    position: absolute;
+    width: 65%;
+    height: 65%;
+    background: radial-gradient(circle, #f8f8f8 0%, #e1e1e1 100%);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: #2c3e50;
+    font-size: clamp(1.5rem, 10vw, 2.2rem);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    text-shadow: 0px 0px 5px rgba(44, 62, 80, 0.2);
+}
+
+    .cover small {
+        font-size: clamp(0.7rem, 4vw, 1rem);
+        font-weight: normal;
+        color: #34495e;
+    }
+
+
+/* ========================================================================= */
+/* # Seção 3: INTERAÇÕES E ESTADOS DE COMPONENTES                            */
+/* ========================================================================= */
+/* Efeitos de transição, hover, foco e desabilitado para uma melhor UX.      */
+/* ------------------------------------------------------------------------- */
+
+/* Transição suave para componentes interativos. */
+.card, .btn, .form-control, .accordion-button {
+    transition: all 0.15s ease-in-out;
+}
+
+/* Efeito de elevação para os cartões interativos do portal. */
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Estilo para botões desabilitados. */
+.btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+
+/* ========================================================================= */
+/* # Seção 4: ESTILOS ESPECÍFICOS DE PÁGINAS                                 */
+/* ========================================================================= */
+/* Regras que se aplicam a páginas ou seções específicas da aplicação.       */
+/* ------------------------------------------------------------------------- */
+
+/* --- Estilos das Páginas de Autenticação (Login, Registro, etc.) --- */
+.login-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centraliza verticalmente */
+    align-items: center; /* Centraliza horizontalmente */
+    flex-grow: 1; /* Ocupa todo o espaço do .main-content */
+}
+
+.login-box {
+    width: 100%;
+    max-width: 450px;
+    background-color: #ffffff;
+    padding: 2.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e9ecef;
+}
+
+.login-logo-clean {
+    max-width: 180px;
+    height: auto;
+}
+
+.login-box .form-control {
+    padding: 1rem;
+    font-size: 1rem;
+}
+
+.login-box .btn-primary {
+    padding: 0.8rem;
+    font-size: 1rem;
+}
+
+.login-box a {
+    text-decoration: none;
+}
+
+    .login-box a:hover {
+        text-decoration: underline;
+    }
+
+/* --- Melhorias Visuais - Painel de Eventos --- */
+/* 1. Remove a sombra azul de foco do botão do accordion. */
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: rgba(0,0,0,.125);
+}
+
+/* 2. Padroniza o visual do botão de filtro de evento ATIVO para um look sóbrio. */
+.event-filter-buttons .btn-check:checked + .btn {
+    background-color: #343a40;
+    color: white;
+    border-color: #343a40;
+}
+
+/* 3. Remove a sombra de foco dos botões de filtro de evento. */
+.event-filter-buttons .btn-check:focus + .btn,
+.event-filter-buttons .btn:focus {
+    box-shadow: none;
+}
+
+/* 4. Remove a sombra de foco do botão "Limpar" para consistência visual. */
+#collapseFiltros .btn-outline-secondary:focus {
+    box-shadow: none;
+}
+
+
+/* ========================================================================= */
+/* # Seção 5: AJUSTES RESPONSIVOS (MEDIA QUERIES)                            */
+/* ========================================================================= */
+/* Agrupa todas as regras de responsividade no final do arquivo.             */
+/* ------------------------------------------------------------------------- */
+
+/* Aumenta a fonte base em telas maiores para melhor legibilidade. */
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+/* Diminui o padding em telas de celular. */
+@media (max-width: 767.98px) {
+    .main-content {
+        padding: 0.5rem;
+    }
+}

@@ -1,0 +1,34 @@
+﻿@page
+@model RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Confirmação de Registro";
+}
+
+<h1 class="mb-4">@ViewData["Title"]</h1> <!-- espaço extra abaixo do título -->
+@{
+    if (@Model.DisplayConfirmAccountLink)
+    {
+        <div class="mb-4">
+            <!-- bloco com espaçamento -->
+            <p class="mb-3">
+                Verifique sua caixa de entrada para confirmar sua conta.
+                Lembre-se de também verificar a pasta <strong>Spam/Lixo eletrônico</strong>, pois o e-mail pode ter sido direcionado para lá.
+            </p>
+
+            <p class="mt-4">
+                Caso não encontre o e-mail, você pode utilizar o botão abaixo para confirmar manualmente:
+            </p>
+
+            <a id="confirm-link" class="btn btn-primary mt-3" href="@Model.EmailConfirmationUrl">
+                Confirmar minha conta
+            </a>
+        </div>
+    }
+    else
+    {
+        <p class="mt-4">
+            Por favor, verifique seu e-mail para confirmar sua conta.
+            Não esqueça de checar também a pasta <strong>Spam/Lixo eletrônico</strong>.
+        </p>
+    }
+}

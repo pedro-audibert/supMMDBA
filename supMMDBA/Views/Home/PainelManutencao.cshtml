@@ -1,0 +1,237 @@
+﻿@*
+    =========================================================================================================
+    ARQUIVO:  Views/Home/PainelManutencao.cshtml (VERSÃO CORRIGIDA)
+    FUNÇÃO:   Exibe o status em tempo real de todas as Entradas e Saídas (IOs) do sistema.
+    ---------------------------------------------------------------------------------------------------------
+    NOTA DE CORREÇÃO:
+    - Adicionada uma nova regra de estilo para a classe ".table-custom-bg .thead-dark".
+    - Esta regra aplica um fundo azul mais sólido aos cabeçalhos das tabelas, criando um
+      contraste visual e melhorando a organização da página.
+    =========================================================================================================
+*@
+
+@{
+    ViewData["Title"] = "Painel de Manutenção";
+}
+
+@* Bloco de estilo para a cor de fundo personalizada das tabelas e cabeçalhos *@
+<style>
+    .table-custom-bg tbody {
+        background-color: #e7f3ff; /* Cor azul suave para o corpo da tabela */
+    }
+
+    .table-custom-bg .thead-dark {
+        background-color: #b8daff; /* Cor azul mais sólida para o cabeçalho */
+        color: #004085; /* Cor do texto escura para bom contraste */
+        border-color: #9fcdff; /* Cor da borda para combinar */
+    }
+</style>
+
+<div class="container-fluid my-4">
+    <h1 class="mb-3 text-center">Painel de Manutenção</h1>
+    <p class="text-center">Status de IOs e dados em Tempo Real.</p>
+
+    <div id="statusConexao" class="alert alert-info alert-status text-center">
+        Conectando ao servidor...
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4" id="containerEntradasDigitais"></div>
+        <div class="col-md-6 mb-4" id="containerSaidasDigitais"></div>
+        <div class="col-md-6 mb-4" id="containerEntradasAnalogicas"></div>
+        <div class="col-md-6 mb-4" id="containerSaidasAnalogicas"></div>
+        <div class="col-md-6 mb-4" id="containerEntradasRapidas"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
+    <script>
+        (function () {
+            // =========================
+            // BLOCO 1: CONFIGURAÇÃO DE IOs
+            // =========================
+            const entradasDigitais = [
+                { id: 'in0_0', endereco: 'I00', descricao: 'Chave de Segurança' },
+                { id: 'in0_1', endereco: 'I01', descricao: 'Botão de Emergência' },
+                { id: 'in0_2', endereco: 'I02', descricao: 'Botão Partida' },
+                { id: 'in0_3', endereco: 'I03', descricao: 'Botão Parada' },
+                { id: 'in0_4', endereco: 'I04', descricao: 'Sensor Falta de Rótulos' },
+                { id: 'in0_5', endereco: 'I05', descricao: 'Sensor Rótulo Sobressalente' },
+                { id: 'in0_6', endereco: 'I06', descricao: 'Sensor Faca na Posição' },
+                { id: 'in0_7', endereco: 'I07', descricao: 'Sensor Acúmulo Entrada' },
+                { id: 'in1_0', endereco: 'I08', descricao: 'Sensor Acúmulo Saída' },
+                { id: 'in1_1', endereco: 'I09', descricao: 'Sensor Parada Entrada' },
+                { id: 'in1_2', endereco: 'I10', descricao: 'Sensor Parada Saída' },
+                { id: 'in1_3', endereco: 'I11', descricao: 'Pressostato' },
+                { id: 'in1_4', endereco: 'I12', descricao: 'Botão Reset' },
+                { id: 'in1_5', endereco: 'I13', descricao: 'Controle de Temperatura' },
+                { id: 'in1_6', endereco: 'I14', descricao: 'Sensor Presença de Garrafas' },
+                { id: 'in1_7', endereco: 'I15', descricao: 'Joggin' },
+            ];
+
+            const saidasDigitais = [
+                { id: 'out0_0', endereco: 'Q00', descricao: 'Máquina em Operação' },
+                { id: 'out0_1', endereco: 'Q01', descricao: 'Aviso Sonoro' },
+                { id: 'out0_2', endereco: 'Q02', descricao: 'Máquina em Falha' },
+                { id: 'out0_3', endereco: 'Q03', descricao: 'Válvula Bloqueio' },
+                { id: 'out0_4', endereco: 'Q04', descricao: 'Válvula Coleiro' },
+                { id: 'out0_5', endereco: 'Q05', descricao: 'Válvula Corte' },
+                { id: 'out0_6', endereco: 'Q06', descricao: 'Válvula Tração' },
+                { id: 'out0_7', endereco: 'Q07', descricao: 'Bomba de Vácuo' },
+                { id: 'out1_0', endereco: 'Q08', descricao: 'Reset Drive Tração' },
+                { id: 'out1_1', endereco: 'Q09', descricao: 'Válvula Trava Freio' },
+                { id: 'out1_2', endereco: 'Q10', descricao: 'Válvula Freio' },
+                { id: 'out1_3', endereco: 'Q11', descricao: 'Lâmpada Reset' },
+                { id: 'out1_4', endereco: 'Q12', descricao: 'Saída Reserva Q12' },
+                { id: 'out1_5', endereco: 'Q13', descricao: 'Saída Reserva Q13' },
+                { id: 'out1_6', endereco: 'Q14', descricao: 'Saída Reserva Q14' },
+                { id: 'out1_7', endereco: 'Q15', descricao: 'Saída Reserva Q15' },
+            ];
+
+            const entradasAnalogicas = [
+                { id: 'inIW2', endereco: 'IW2', descricao: 'Posição Balancin Freio' },
+                { id: 'inIW4', endereco: 'IW4', descricao: 'Entrada Reserva IW1' },
+                { id: 'inIW6', endereco: 'IW6', descricao: 'Entrada Reserva IW2' },
+                { id: 'inIW8', endereco: 'IW8', descricao: 'Entrada Reserva IW3' },
+            ];
+
+            const saidasAnalogicas = [
+                { id: 'outQW2', endereco: 'QW2', descricao: 'Pressão Freio Desbobinador' },
+                { id: 'outQW4', endereco: 'QW4', descricao: 'Saída Reserva QW4' },
+            ];
+
+            const entradasRapidas = [
+                { id: 'inHSC00', endereco: 'HSC00', descricao: 'Encoder Mestre' },
+                { id: 'inHSC01', endereco: 'HSC01', descricao: 'Entrada Rápida Reserva HSC01' },
+                { id: 'inHSC02', endereco: 'HSC02', descricao: 'Entrada Rápida Reserva HSC02' },
+                { id: 'inHSC03', endereco: 'HSC03', descricao: 'Entrada Rápida Reserva HSC03' },
+            ];
+
+            // =========================
+            // BLOCO 2: PERSISTÊNCIA COM LOCALSTORAGE
+            // =========================
+            const LOCAL_STORAGE_KEY = 'painelIOsStatus';
+
+            function carregarTodosOsEstados() {
+                try {
+                    const dadosSalvos = localStorage.getItem(LOCAL_STORAGE_KEY);
+                    return dadosSalvos ? JSON.parse(dadosSalvos) : {};
+                } catch (e) {
+                    console.error("Erro ao carregar dados do localStorage.", e);
+                    return {};
+                }
+            }
+
+            function salvarEstado(id, estado) {
+                try {
+                    const todos = carregarTodosOsEstados();
+                    todos[id] = estado;
+                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
+                } catch (e) {
+                    console.error(`Erro ao salvar o estado do IO '${id}'.`, e);
+                }
+            }
+
+            // =========================
+            // BLOCO 3: GERAÇÃO E ATUALIZAÇÃO DA UI
+            // =========================
+            function gerarTabela(containerId, titulo, cabecalhos, dados) {
+                const container = document.getElementById(containerId);
+                if (!container) return console.error(`Container '${containerId}' não encontrado.`);
+
+                const estadosSalvos = carregarTodosOsEstados();
+
+                const linhasHtml = dados.map(item => {
+                    const estado = estadosSalvos[item.id] || {};
+                    const texto = estado.texto || 'Desconhecido';
+                    const classe = estado.className || 'fw-bold';
+
+                    return `<tr>
+                                <td>${item.endereco}</td>
+                                <td>${item.descricao}</td>
+                                <td id="${item.id}" class="${classe}">${texto}</td>
+                            </tr>`;
+                }).join('');
+
+                container.innerHTML = `
+                    <h4 class="text-center">${titulo}</h4>
+                    <table class="table table-bordered table-sm table-custom-bg">
+                        <thead class="thead-dark text-center">
+                            <tr><th>${cabecalhos[0]}</th><th>${cabecalhos[1]}</th><th>${cabecalhos[2]}</th></tr>
+                        </thead>
+                        <tbody class="text-center">${linhasHtml}</tbody>
+                    </table>`;
+            }
+
+            function atualizarIOs(ultimoIOs) {
+                const { codigoEvento, valor } = ultimoIOs;
+                if (!codigoEvento) return;
+
+                const el = document.getElementById(codigoEvento);
+                if (!el) return;
+
+                let texto, classe;
+                if (valor === 'true' || valor === 'false') {
+                    const ativo = valor === 'true';
+                    texto = ativo ? "ON" : "OFF";
+                    classe = ativo ? "bg-success text-white fw-bold" : "bg-danger text-white fw-bold";
+                } else {
+                    texto = valor;
+                    classe = "fw-bold";
+                }
+
+                el.textContent = texto;
+                el.className = classe;
+                salvarEstado(codigoEvento, { texto, className: classe });
+            }
+
+            // =========================
+            // BLOCO 4: SIGNALR - CONEXÃO E INICIALIZAÇÃO
+            // =========================
+            async function iniciarConexaoSignalR() {
+                const statusDiv = document.getElementById("statusConexao");
+                const connection = new signalR.HubConnectionBuilder()
+                    .withUrl("/iosHub")
+                    .withAutomaticReconnect()
+                    .build();
+
+                connection.on("postIOs", atualizarIOs);
+
+                connection.onreconnecting(() => {
+                    statusDiv.className = "alert alert-warning alert-status text-center";
+                    statusDiv.textContent = "Conexão perdida. Tentando reconectar…";
+                });
+                connection.onreconnected(() => {
+                    statusDiv.className = "alert alert-success alert-status text-center";
+                    statusDiv.textContent = "Reconectado com sucesso!";
+                });
+                connection.onclose(() => {
+                    statusDiv.className = "alert alert-danger alert-status text-center";
+                    statusDiv.textContent = "Conexão encerrada. Nova tentativa em 5 segundos...";
+                    setTimeout(iniciarConexaoSignalR, 5000);
+                });
+
+                try {
+                    await connection.start();
+                    statusDiv.className = "alert alert-success alert-status text-center";
+                    statusDiv.textContent = "Conectado ao servidor em " + new Date().toLocaleTimeString();
+
+                    // Gera as tabelas após conexão
+                    gerarTabela('containerEntradasDigitais', 'Entradas Digitais', ['Endereço', 'Descrição', 'Status'], entradasDigitais);
+                    gerarTabela('containerSaidasDigitais', 'Saídas Digitais', ['Endereço', 'Descrição', 'Status'], saidasDigitais);
+                    gerarTabela('containerEntradasAnalogicas', 'Entradas Analógicas', ['Canal', 'Descrição', 'Valor'], entradasAnalogicas);
+                    gerarTabela('containerSaidasAnalogicas', 'Saídas Analógicas', ['Canal', 'Descrição', 'Valor'], saidasAnalogicas);
+                    gerarTabela('containerEntradasRapidas', 'Entradas Rápidas (HSC)', ['Canal', 'Descrição', 'Valor'], entradasRapidas);
+                } catch (err) {
+                    console.error("Falha na conexão com o iosHub:", err);
+                    statusDiv.className = "alert alert-danger alert-status text-center";
+                    statusDiv.textContent = "Falha na conexão. Nova tentativa em 5 segundos.";
+                    setTimeout(iniciarConexaoSignalR, 5000);
+                }
+            }
+
+            iniciarConexaoSignalR();
+        })();
+    </script>
+}

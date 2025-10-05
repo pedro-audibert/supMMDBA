@@ -1,0 +1,101 @@
+﻿@*
+================================================================================================
+ARQUIVO: Views/Home/Privacy.cshtml
+FUNÇÃO:  Exibe a Política de Privacidade detalhada do Sistema Supervisório, alinhada com as
+         funcionalidades implementadas e as tecnologias utilizadas.
+================================================================================================
+*@
+@{
+    ViewData["Title"] = "Política de Privacidade";
+}
+
+<div class="container my-4">
+    <h1 class="mb-3 text-center">@ViewData["Title"]</h1>
+    <p class="text-center text-muted">Última atualização: 21 de setembro de 2025</p>
+
+    <div class="text-center my-5">
+        <img src="~/images/logo.png" alt="Logo do Sistema Supervisório" style="max-width: 400px; height: auto;" />
+        <p style="font-size: 18px; color: #333; font-weight: 500; margin-top: 1rem;">
+            Conectando máquinas, Otimizando resultados!
+        </p>
+    </div>
+
+    <div class="container">
+        <p>Bem-vindo ao nosso Sistema Supervisório. Esta Política de Privacidade visa informar de maneira clara e transparente como coletamos, usamos, armazenamos e protegemos os seus dados. Nosso compromisso é com a segurança da sua informação e o cumprimento das leis aplicáveis, como a Lei Geral de Proteção de Dados (LGPD) do Brasil.</p>
+
+        <section class="mb-4">
+            <h2>1. Dados que Coletamos</h2>
+            <p>Nosso sistema coleta dois tipos de dados para funcionar adequadamente:</p>
+
+            <h5>1.1. Dados Pessoais do Usuário</h5>
+            <p>Coletamos as informações que você nos fornece durante o processo de registro e gerenciamento de sua conta:</p>
+            <ul>
+                <li><strong>Endereço de e-mail:</strong> Utilizado como nome de usuário para login, para comunicação essencial sobre sua conta e para a recuperação de senha.</li>
+                <li><strong>Senha:</strong> Armazenada de forma segura utilizando algoritmos de hash robustos (padrão do ASP.NET Core Identity), garantindo que nem mesmo nós tenhamos acesso à sua senha original.</li>
+                <li><strong>Número de Telefone (Opcional):</strong> Utilizado exclusivamente para a configuração da Autenticação de Dois Fatores (2FA), uma camada extra de segurança para sua conta.</li>
+            </ul>
+
+            <h5>1.2. Dados de Automação Industrial</h5>
+            <p>Coletamos dados operacionais diretamente dos equipamentos (CLPs) conectados à plataforma via Node-RED. Estes dados são o núcleo do nosso serviço e incluem:</p>
+            <ul>
+                <li>Registros de eventos da máquina (Alarmes, Avisos e Status).</li>
+                <li>Dados de velocidade de produção.</li>
+                <li>Dados de contagem de produção.</li>
+            </ul>
+        </section>
+
+        <section class="mb-4">
+            <h2>2. Como Usamos os Dados</h2>
+            <ul>
+                <li><strong>Para Operar a Plataforma:</strong> Seus dados pessoais são usados para autenticar seu acesso e garantir a segurança da sua conta.</li>
+                <li><strong>Para Fornecer os Serviços:</strong> Os dados industriais são processados para gerar dashboards em tempo real, históricos de eventos para análise de falhas, relatórios de produtividade e para o cálculo de indicadores de eficiência (OEE).</li>
+                <li><strong>Para Comunicação:</strong> Utilizamos seu e-mail para enviar notificações importantes, como a confirmação de registro e links para redefinição de senha.</li>
+            </ul>
+        </section>
+
+        <section class="mb-4">
+            <h2>3. Compartilhamento de Dados com Terceiros</h2>
+            <p>Nós não vendemos ou compartilhamos seus dados com terceiros para fins de marketing. No entanto, para o funcionamento de serviços essenciais, utilizamos parceiros tecnológicos confiáveis:</p>
+            <ul>
+                <li><strong>SendGrid:</strong> Para o envio de e-mails transacionais (confirmação de conta, redefinição de senha), seu endereço de e-mail é processado pela plataforma SendGrid. Você pode consultar a política de privacidade deles para mais informações.</li>
+                <li><strong>Cloudflare:</strong> Utilizamos os serviços da Cloudflare para garantir a segurança, performance e disponibilidade da nossa plataforma, protegendo contra ataques e otimizando a entrega de conteúdo.</li>
+            </ul>
+        </section>
+
+        <section class="mb-4">
+            <h2>4. Segurança e Armazenamento</h2>
+            <p>Levamos a segurança dos seus dados a sério. As informações são armazenadas em um banco de dados seguro (PostgreSQL) e adotamos as seguintes práticas:</p>
+            <ul>
+                <li><strong>Criptografia em Trânsito:</strong> Toda a comunicação entre seu navegador e nossos servidores é protegida com criptografia HTTPS/TLS.</li>
+                <li><strong>Controle de Acesso:</strong> O acesso aos dados é restrito por um sistema de autenticação e papéis de usuário, garantindo que cada usuário veja apenas as informações pertinentes.</li>
+                <li><strong>Segurança de Senhas:</strong> Suas senhas são "hasheadas" e "salgadas", seguindo as melhores práticas da indústria para impedir o acesso não autorizado.</li>
+            </ul>
+        </section>
+
+        <section class="mb-4">
+            <h2>5. Seus Direitos (Conformidade com a LGPD)</h2>
+            <p>Em conformidade com a Lei Geral de Proteção de Dados, você tem controle sobre seus dados pessoais. Através da área de gerenciamento de perfil, você pode:</p>
+            <ul>
+                <li>Acessar e atualizar suas informações de contato.</li>
+                <li>Alterar sua senha.</li>
+                <li>Configurar ou desativar a Autenticação de Dois Fatores (2FA).</li>
+                <li>Exportar e solicitar a exclusão dos seus dados pessoais.</li>
+            </ul>
+        </section>
+
+        <section class="mb-4">
+            <h2>6. Cookies</h2>
+            <p>Utilizamos <strong>cookies de autenticação de sessão</strong>, que são essenciais para o funcionamento seguro da plataforma. Esses cookies permitem que você permaneça logado enquanto navega nas áreas restritas do sistema e são automaticamente removidos quando você encerra sua sessão (fazendo logout ou fechando o navegador). Não utilizamos cookies para rastreamento ou publicidade.</p>
+        </section>
+
+        <section class="mb-4">
+            <h2>7. Alterações nesta Política</h2>
+            <p>Esta Política de Privacidade pode ser atualizada periodicamente para refletir mudanças em nossas práticas ou na legislação. Recomendamos que você consulte esta página regularmente para se manter informado.</p>
+        </section>
+
+        <section class="mb-4">
+            <h2>8. Contato</h2>
+            <p>Se você tiver dúvidas ou preocupações sobre esta Política de Privacidade ou sobre nossas práticas de dados, por favor, entre em contato conosco através do nosso suporte técnico.</p>
+        </section>
+    </div>
+</div>

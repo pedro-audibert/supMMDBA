@@ -1,0 +1,59 @@
+# Arquivos de cache e de usuário do Visual Studio
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Arquivos de build e dependências do Visual Studio
+*.vs/
+.vs/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# Arquivos de configuração específicos do ambiente de desenvolvimento
+appsettings.Development.json
+
+# Arquivos gerados pelo Resharper
+_ReSharper*/
+*.[Rr]esharper
+*.DotSettings.user
+
+# Arquivos de publicação do Visual Studio
+*.pubxml
+*.publishproj
+
+# Arquivos de teste do NUnit
+*.nupkg
+*.nuget.props
+*.nuget.targets
+
+# Arquivos de teste e cobertura de código
+*.trx
+*.coverlet.sonarqube.xml
+coverage.cobertura.xml
+
+# Arquivos de sistema operacional
+[Tt]humbs.db
+.DS_Store
+
+# Diretórios de pacotes NuGet
+/packages/
+*.nupkg
+
+# Arquivos de metadados do Nuget
+.nupkg.metadata
+.nuget.cache
+
+# Outros
+*.csproj.dotsettings
+*.*.swp
